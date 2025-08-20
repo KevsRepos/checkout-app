@@ -1,5 +1,7 @@
 node_modules
 
+upload-keystore.jks
+
 # Output
 .output
 .vercel
