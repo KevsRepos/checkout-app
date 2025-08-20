@@ -1,3 +1,9 @@
+# Build App
+
+- With Tauri: npx tauri build android
+- With Capacitor: npx cap run android
+
+
 # sv
 
 Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
