@@ -1,9 +1,11 @@
 <script lang="ts">
+import ArticleNumPad from "$lib/components/ArticleNumPad.svelte";
+
 let regularDrinkPrice: number = $state(210);
 
 let cornPrice: number = $state(150);
 
-let mixedPrice: number = $derived(regularDrinkPrice + cornPrice);
+let mixedPrice: number = $state(350);
 
 let depositPrice = $state(100);
 
@@ -43,62 +45,20 @@ const resetAll = () => {
 </script>
 
 <div class="grid grid-cols-3 border-b [&>*]:px-2 [&>*]:pb-2">
-	<div class="">
-		<div class="px-1">
-			<span class="uppercase">Getränk 0,2l</span>
-			<input class="bg-gray-100 w-15" type="number" bind:value={regularDrinkPrice}/>ct
-		</div>
-		<div class="grid grid-cols-5">
-			{#each { length: 30 }, quantity}
-				<label class="m-1 p-2 bg-gray-200 flex justify-center">
-					{quantity + 1}
-					<input class="hidden" type="radio" name="regularDrinkQuantity" value={quantity + 1} bind:group={regularDrinkQuantity}/>
-				</label>
-			{/each}
-		</div>
-	</div>
-
-	<div class="border-x">
-		<div class="px-1">
-			<span class="uppercase">Schnaps 0,02l</span>
-			<input class="bg-gray-100 w-15" type="number" bind:value={cornPrice}/>ct
-		</div>
-		<div class="grid grid-cols-5">
-			{#each { length: 30 }, quantity}
-				<label class="m-1 p-2 bg-gray-200 flex justify-center">
-					{quantity + 1}
-					<input class="hidden" type="radio" name="cornQuantity" value={quantity + 1} bind:group={cornQuantity}/>
-				</label>
-			{/each}
-		</div>
-	</div>
-
-	<div class="">
-		<div class="px-1">
-			<span class="uppercase">Mischgetränk 0,2l</span>
-			<span class="bg-gray-200">{mixedPrice}</span>ct (errechnet)
-			<!-- <input class="bg-gray-100 w-15" bind:value={mixedPrice}/>ct -->
-		</div>
-		<div class="grid grid-cols-5">
-			{#each { length: 30 }, quantity}
-				<label class="m-1 p-2 bg-gray-200 flex justify-center">
-					{quantity + 1}
-					<input class="hidden" type="radio" name="mixedQuantity" value={quantity + 1} bind:group={mixedQuantity}/>
-				</label>
-			{/each}
-		</div>
-	</div>
+	<ArticleNumPad bind:articlePrice={regularDrinkPrice} bind:articleQuantity={regularDrinkQuantity} articleName="Getränk 0,2l"/>
+	<ArticleNumPad bind:articlePrice={mixedPrice} bind:articleQuantity={mixedQuantity} articleName="Mischgetränk 0,2l" class="border-x"/>
+	<ArticleNumPad bind:articlePrice={cornPrice} bind:articleQuantity={cornQuantity} articleName="Korn 0,02l"/>
 </div>
 
-<div class="grid grid-cols-2 gap-1 px-1 border-b">
+<div class="grid grid-cols-2 gap-1 px-1 pt-1 border-b">
 	<div>
 		<div>
-			<div class="h-6 flex justify-between">
+			<div class="flex justify-between items-center">
 				<div>
 					<span class="uppercase ps-1">Erhaltene Gläser</span>
 					<input class="bg-gray-100 w-15" bind:value={depositPrice}/>ct
 				</div>
-				<div class="bg-gray-200 text-2xl me-1 flex items-center gap-2">
+				<div class="text-3xl h-9 min-w-1/4 me-1 flex justify-end items-center gap-2">
 					{#if depositInput.length}
 						<span>{depositInput} Stk</span>
 						<button class="leading-1" onpointerdown={() => depositInput = ''}>❌</button>
@@ -116,11 +76,11 @@ const resetAll = () => {
 
 	<div>
 		<div>
-			<div class="h-6 flex justify-between">
-				<div class="uppercase ps-1">Erhaltene Euro</div>
-				<div class="bg-gray-200 text-2xl me-1 flex items-center gap-2">
+			<div class="flex justify-between items-center">
+				<div class="uppercase ps-1 pt-1">Erhaltene Euro</div>
+				<div class="text-3xl h-9 min-w-1/4 me-1 flex justify-end items-center gap-2">
 					{#if moneyInput.length}
-						<span>{moneyInput}€</span>
+						<span>{Number(moneyInput).toFixed(2)}€</span>
 						<button class="leading-1" onpointerdown={() => moneyInput = ''}>❌</button>
 					{/if}
 				</div>
@@ -154,12 +114,3 @@ const resetAll = () => {
 		<button class="h-full w-30 bg-red-500 text-4xl text-white" onpointerdown={resetAll}>C</button>
 	</div>
 </div>
-
-<style>
-label:has([name="regularDrinkQuantity"]:checked),
-label:has([name="cornQuantity"]:checked),
-label:has([name="mixedQuantity"]:checked) {
-	background-color: green;
-	color: white;
-}
-</style>
