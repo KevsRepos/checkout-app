@@ -23,9 +23,12 @@ let moneyInput: string = $state('');
 
 let moneyReceived = $derived(parseFloat(moneyInput) * 100 || 0);
 
+
+let cornDeposit = $state(true);
+
 const amountRegularDrink = $derived((regularDrinkQuantity * regularDrinkPrice) + (regularDrinkQuantity * depositPrice));
 
-const amountCorn = $derived(cornQuantity * cornPrice);
+const amountCorn = $derived((cornQuantity * cornPrice) + (cornDeposit ? (cornQuantity * depositPrice) : 0));
 
 const amountMixed = $derived((mixedQuantity * mixedPrice) + (mixedQuantity * depositPrice));
 
@@ -45,9 +48,9 @@ const resetAll = () => {
 </script>
 
 <div class="grid grid-cols-3 border-b [&>*]:px-2 [&>*]:pb-2">
-	<ArticleNumPad bind:articlePrice={regularDrinkPrice} bind:articleQuantity={regularDrinkQuantity} articleName="Getränk 0,2l"/>
-	<ArticleNumPad bind:articlePrice={mixedPrice} bind:articleQuantity={mixedQuantity} articleName="Mischgetränk 0,2l" class="border-x"/>
-	<ArticleNumPad bind:articlePrice={cornPrice} bind:articleQuantity={cornQuantity} articleName="Korn 0,02l"/>
+	<ArticleNumPad bind:articlePrice={regularDrinkPrice} bind:articleQuantity={regularDrinkQuantity} articleName="Getränk 0,2l" hasDeposit={true}/>
+	<ArticleNumPad bind:articlePrice={mixedPrice} bind:articleQuantity={mixedQuantity} articleName="Mischgetränk 0,2l" class="border-x" hasDeposit={true}/>
+	<ArticleNumPad bind:articlePrice={cornPrice} bind:articleQuantity={cornQuantity} articleName="Korn 0,02l" bind:hasDeposit={cornDeposit}/>
 </div>
 
 <div class="grid grid-cols-2 gap-1 px-1 pt-1 border-b">
@@ -56,7 +59,7 @@ const resetAll = () => {
 			<div class="flex justify-between items-center">
 				<div>
 					<span class="uppercase ps-1">Erhaltene Gläser</span>
-					<input class="bg-gray-100 w-15" bind:value={depositPrice}/>ct
+					<input class="bg-gray-100 w-15" type="number" bind:value={depositPrice}/>ct
 				</div>
 				<div class="text-3xl h-9 min-w-1/4 me-1 flex justify-end items-center gap-2">
 					{#if depositInput.length}

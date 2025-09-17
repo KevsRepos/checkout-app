@@ -1,5 +1,5 @@
 <script lang="ts">
-let {articlePrice = $bindable(), articleQuantity = $bindable(), articleName, ...rest} = $props();
+let {articlePrice = $bindable(), articleQuantity = $bindable(), hasDeposit = $bindable(), articleName, ...rest} = $props();
 
 const toggle = (quantity: number) => {
 	if(articleQuantity === quantity) {
@@ -14,6 +14,8 @@ const toggle = (quantity: number) => {
 	<div class="px-1">
 		<span class="uppercase">{articleName}</span>
 		<input class="bg-gray-100 w-15" type="number" bind:value={articlePrice}/>ct
+		<input type="checkbox" bind:checked={hasDeposit}/>
+		Glaspfand
 	</div>
 	<div class="grid grid-cols-5">
 		{#each { length: 30 }, quantity}
